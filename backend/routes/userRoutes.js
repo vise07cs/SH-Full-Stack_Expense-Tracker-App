@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../../models/User");
+const bcrypt = require("bcrypt");
 
 // Signup route
 router.post("/signup", async (req, res) => {
@@ -13,8 +14,13 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    // create new user
-    await User.create({ name, email, password });
+    // hash password with salt rounds of 10
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+     // save user with hashed password
+    await User.create({ name, email, password: hashedPassword });
+
+
 
     res.status(201).json({ message: "User signed up successfully!" });
   } catch (err) {
