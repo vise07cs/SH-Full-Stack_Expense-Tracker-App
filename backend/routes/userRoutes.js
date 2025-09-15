@@ -40,10 +40,14 @@ router.post("/login", async (req, res) => {
       return res.status(404).json({ message: "No user exists with the given Email" });
     }
 
-    // Check password
-    if (user.password !== password) {
-      return res.status(401).json({ message: "Password is incorrect , user is not aurthorized" });
+ 
+
+    // Check password with hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Incorrect password" });
     }
+  
 
     res.json({ message: " User Login successful! Welcome " });
   } catch (err) {
