@@ -31,15 +31,15 @@ router.post("/login", async (req, res) => {
     // Check if email exists
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).json({ message: "No user exists with the given Email" });
+      return res.status(404).json({ message: "No user exists with the given Email" });
     }
 
     // Check password
     if (user.password !== password) {
-      return res.status(400).json({ message: "Password is incorrect" });
+      return res.status(401).json({ message: "Password is incorrect , user is not aurthorized" });
     }
 
-    res.json({ message: "Login successful! Welcome " });
+    res.json({ message: " User Login successful! Welcome " });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Something went wrong" });
