@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const sequelize = require("./utils/db");
 const userRoutes = require("./backend/routes/userRoutes");
+const expenseRoutes = require("./backend/routes/expenseRoutes");
 
 const app = express();
 
@@ -10,6 +11,8 @@ app.use(express.json());
 
 // static frontend
 app.use(express.static("public"));
+
+app.use("/expense", expenseRoutes);
 
 // user routes
 app.use("/user", userRoutes);

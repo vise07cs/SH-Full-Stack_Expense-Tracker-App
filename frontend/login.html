@@ -33,11 +33,23 @@
         });
 
         const data = await res.json();
+        
+        if (res.ok) {
+        // If login is successful, redirect to expense page
+
+        alert("Login Successful!");
+        window.location.href = "expense.html";
+
+      } else {
+        
+        //  If login failed, show error
+
         document.getElementById("responseMsg").textContent = data.message;
-      } catch (err) {
-        document.getElementById("responseMsg").textContent = "Error: " + err.message;
       }
-    });
+    } catch (err) {
+      document.getElementById("responseMsg").textContent = "Error: " + err.message;
+    }
+  });
   </script>
 </body>
 </html>
