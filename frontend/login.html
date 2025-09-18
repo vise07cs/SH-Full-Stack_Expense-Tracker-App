@@ -36,6 +36,7 @@
         
         if (res.ok) {
         // If login is successful, redirect to expense page
+        localStorage.setItem("token", data.token); // store JWT token
 
         alert("Login Successful!");
         window.location.href = "expense.html";

@@ -1,9 +1,23 @@
 const expenseList = document.getElementById("expenseList");
 const addBtn = document.getElementById("addExpenseBtn");
+const token = localStorage.getItem("token"); // get token from localStorage
 
 async function fetchExpenses() {
-  const res = await fetch("http://localhost:3010/expense/getExpenses");
+  const res = await fetch("http://localhost:3010/expense/getExpenses",{
+    headers: { Authorization: `Bearer ${token}` }
+  } );
+
+   if (!res.ok) { // handle 401/403
+    const err = await res.json();
+    console.error("Error fetching expenses:", err);
+    return;
+  }
+
+
+
   const expenses = await res.json();
+
+  console.log("Fetched expenses:", expenses);
 
   expenseList.innerHTML = ""; // clear old list
   expenses.forEach(exp => {
@@ -28,8 +42,10 @@ addBtn.addEventListener("click", async () => {
 
   await fetch("http://localhost:3010/expense/addExpense", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount, description, category,userId:1 })
+    headers: { "Content-Type": "application/json" ,
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ amount, description, category })
   });
 
   // Refresh list
@@ -40,6 +56,7 @@ addBtn.addEventListener("click", async () => {
 async function deleteExpense(id) {
   await fetch(`http://localhost:3010/expense/deleteExpense/${id}`, {
     method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` }
   });
   fetchExpenses();
 }

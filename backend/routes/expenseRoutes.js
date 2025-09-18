@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const Expense = require("../../models/Expense");
+const authMiddleware = require("../middleware/authMiddleware");
 
 
-// Add Expense
-router.post("/addExpense", async (req, res) => {
+// Add Expense , now with the logged in user ID
+router.post("/addExpense",authMiddleware, async (req, res) => {
   try {
-    const { amount, description, category,userId } = req.body;
+    const { amount, description, category} = req.body;
+       const userId = req.user.userId; // from JWT
 
         if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
@@ -21,9 +23,10 @@ router.post("/addExpense", async (req, res) => {
 });
 
 // Get all expenses
-router.get("/getExpenses", async (req, res) => {
+router.get("/getExpenses",authMiddleware, async (req, res) => {
   try {
-    const expenses = await Expense.findAll();
+    const userId = req.user.userId; // from JWT
+    const expenses = await Expense.findAll({where: {userId}});
     res.json(expenses);
   } catch (err) {
     console.error(err);
@@ -31,11 +34,12 @@ router.get("/getExpenses", async (req, res) => {
   }
 });
 
-// Delete expense
+// Delete expense now only if it belongs to the logged in user
 router.delete("/deleteExpense/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const expense = await Expense.findByPk(id);
+    const userId = req.user.userId; // from JWT
+    const expense = await Expense.findOne({ where: { id, userId } });
 
     if (!expense) {
       return res.status(404).json({ message: "Expense not found" });

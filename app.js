@@ -3,6 +3,7 @@ const cors = require("cors");
 const sequelize = require("./utils/db");
 const userRoutes = require("./backend/routes/userRoutes");
 const expenseRoutes = require("./backend/routes/expenseRoutes");
+const authMiddleware=require("./backend/middleware/authMiddleware");
 
 const app = express();
 
@@ -12,7 +13,7 @@ app.use(express.json());
 // static frontend
 app.use(express.static("public"));
 
-app.use("/expense", expenseRoutes);
+app.use("/expense",authMiddleware, expenseRoutes);
 
 // user routes
 app.use("/user", userRoutes);
