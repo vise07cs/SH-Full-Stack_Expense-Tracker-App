@@ -18,7 +18,7 @@ app.use("/expense", expenseRoutes);
 app.use("/user", userRoutes);
 
 // sync DB and start server
-sequelize.sync()
+sequelize.sync({alter: true})
   .then(() => {
     console.log("Database synced");
     app.listen(3010, () => {

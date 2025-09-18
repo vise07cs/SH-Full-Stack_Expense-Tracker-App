@@ -19,6 +19,19 @@ const Expense = sequelize.define("Expense", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  userId:{
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Users', // name of the target model
+      key: 'id', // key in the target model that we're referencing
+  },
+  onDelete: 'CASCADE'
+  }
+
+
+
+
 });
 
 module.exports = Expense;

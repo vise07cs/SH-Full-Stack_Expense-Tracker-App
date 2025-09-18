@@ -6,8 +6,13 @@ const Expense = require("../../models/Expense");
 // Add Expense
 router.post("/addExpense", async (req, res) => {
   try {
-    const { amount, description, category } = req.body;
-    const newExpense = await Expense.create({ amount, description, category });
+    const { amount, description, category,userId } = req.body;
+
+        if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const newExpense = await Expense.create({ amount, description, category ,userId });
     res.status(201).json(newExpense);
   } catch (err) {
     console.error(err);

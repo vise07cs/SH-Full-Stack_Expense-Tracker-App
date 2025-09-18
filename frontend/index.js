@@ -29,7 +29,7 @@ addBtn.addEventListener("click", async () => {
   await fetch("http://localhost:3010/expense/addExpense", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount, description, category })
+    body: JSON.stringify({ amount, description, category,userId:1 })
   });
 
   // Refresh list
